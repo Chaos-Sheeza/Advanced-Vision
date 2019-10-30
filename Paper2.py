@@ -16,24 +16,26 @@ def mouse(event,x,y,flags,param):
         return True
 
 def patch(x,y,img, size):
-        maxX,maxY = img.shape[0], img.shape[1]
+        maxY,maxX = img.shape[0], img.shape[1]
+
         if x-(size/2) < 0:
                 newX = 0
-        elif x+(size/2) >= maxX-1:
+        elif x+(size/2) > maxX-1:
                 newX = maxX-(size+1)
+        else:
+                newX = x-(size/2)
+
         if y-(size/2) < 0:
                 newY = 0
-        elif y+(size/2) >= maxY-1:
+        elif y+(size/2) > maxY-1:
                 newY = maxY-(size+1)
-        newX = round(x-(size/2))
-        newY = round(y+(size/2))
-        temp = []
-        patch = []
-        for i in range(size):
-                temp.clear()
-                for j in range(size):
-                        temp.append(img[newY+i][newX+j])
-                patch.append(temp)
+        else:
+                newY = y+(size/2)
+
+        newX = int(newX)
+        newY = int(newY)
+
+        patch = img[newX:newX+size, newY:newY+size]
         return patch
 
 def dtObj(x,y,treshD,treshT,T,D,Patch):
