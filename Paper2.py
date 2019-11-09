@@ -3,10 +3,10 @@ import numpy as np
 
 T = cv2.imread("P1 Resources/c4t.bmp")
 D = cv2.imread("P1 Resources/c4d.bmp")
-td = 60000
-tt = 30000
+td = 6000
+tt = 3000
 p1,p2 = [],[]
-s = 20
+s = 6
 
 # Standard deviation function
 def SSD(refPatch, iPatch):
@@ -25,9 +25,11 @@ def mouse(event,x,y,flags,param):
                 p2.clear()
                 p2.append(y)
                 # grabs patch around mouse click and displays patch.
-                im2 = patch(p1[0],p2[0],T,s)
-                cv2.imshow('test',im2)
-                print(dtObj(x,y,tt,td,T,D,20)) # check cv2 tresholds.
+                #im2 = patch(p1[0],p2[0],T,s)
+                #cv2.imshow('test',im2)
+                tmp = dtObj(x,y,tt,td,T,D,s)
+                #print(tmp) # check cv2 tresholds.
+                plot(tmp[0],tmp[1],T)
                 return True
 
 # function that returns a patch around a single coordinate.
@@ -67,29 +69,45 @@ def patch(y,x,img,size):
 
 # resource: "Efficient Object Selection using Depth and Texture Information", Dylan Seychell, Carl James Debono 
 def dtObj(xs,ys,treshD,treshT,T,D,Patch):
-        x,y,i = 20,20,0
+        y,i = Patch,0
         Ld,Lt = [],[]
         #ssdD,ssdT = [],[]
         dPatch = patch(xs,ys,D,Patch)
         tPatch = patch(xs,ys,T,Patch)
-        while(x<(T.shape[1]-Patch) and y<(T.shape[0]-Patch)):
-                idPatch = patch(x,y,D,Patch)
-                #print(idPatch)
-                itPatch = patch(x,y,T,Patch)
-                #print(itPatch)
-                ssdD = SSD(dPatch,idPatch)
-                ssdT = SSD(tPatch,itPatch)
-                print(ssdD)
+        while y<(T.shape[0]-Patch):
+                x = Patch
+                while x<(T.shape[1]-Patch):
+                        idPatch = patch(x,y,D,Patch)
+                        #print(idPatch)
+                        itPatch = patch(x,y,T,Patch)
+                        #print(itPatch)
+                        ssdD = SSD(dPatch,idPatch)
+                        ssdT = SSD(tPatch,itPatch)
+                        #print(ssdD)
 
-                if ssdD < treshD:
-                        Ld.append([x,y])
-                if ssdT < treshT:
-                        Lt.append([x,y])
+                        if ssdD < treshD:
+                                Ld.append([y,x])
+                        if ssdT < treshT:
+                                Lt.append([y,x])
 
-                x = x + Patch
+                        x = x + Patch
                 y = y + Patch
+
         return Ld, Lt
 
+def plot(Ld,Lt,img):
+        temp = img
+        Comm = comm(Ld,Lt)
+        for j in range(len(Comm)):
+                temp[Comm[j][0], Comm[j][1]] = [0,0,255]
+        cv2.imshow('result',temp)
+
+def comm(t,d):
+        temp = []
+        for j in range(len(t)):
+                if t[j] in d:
+                        temp.append(t[j])
+        return temp
 
 cv2.imshow('Texture',T)
 #cv2.imshow('Depth',D)
