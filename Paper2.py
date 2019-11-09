@@ -1,8 +1,11 @@
 import cv2
 import numpy as np
 
-T = cv2.imread("P1 Resources/c4t.bmp")
-D = cv2.imread("P1 Resources/c4d.bmp")
+img1 = cv2.imread("P1 Resources/c4t.bmp")
+img2 = cv2.imread("P1 Resources/c4d.bmp")
+T = cv2.GaussianBlur(img1,(5,5),0)
+D = cv2.GaussianBlur(img2,(5,5),0)
+
 td = 6000
 tt = 3000
 p1,p2 = [],[]
@@ -29,7 +32,7 @@ def mouse(event,x,y,flags,param):
                 #cv2.imshow('test',im2)
                 tmp = dtObj(x,y,tt,td,T,D,s)
                 #print(tmp) # check cv2 tresholds.
-                plot(tmp[0],tmp[1],T)
+                plot(tmp[0],tmp[1],img1)
                 return True
 
 # function that returns a patch around a single coordinate.
@@ -109,7 +112,7 @@ def comm(t,d):
                         temp.append(t[j])
         return temp
 
-cv2.imshow('Texture',T)
+cv2.imshow('Texture',img1)
 #cv2.imshow('Depth',D)
 cv2.setMouseCallback('Texture', mouse)
 cv2.waitKey(0)
