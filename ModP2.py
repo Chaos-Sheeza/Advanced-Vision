@@ -6,8 +6,8 @@ img2 = cv2.imread("P1 Resources/c4d.bmp")
 T = cv2.GaussianBlur(img1,(5,5),0)
 D = cv2.GaussianBlur(img2,(5,5),0)
 
-td = 6000
-tt = 6000
+td = 3000
+tt = 3000
 p1,p2 = [],[]
 s = 6
 
@@ -23,49 +23,19 @@ def SSD(refPatch, iPatch):
 def mouse(event,x,y,flags,param):
         if event == cv2.EVENT_LBUTTONDBLCLK:    # if left mouse button is double clicked
                 # clears previous coordinates and appends current mouse coordinate.
-                p1.clear()
+                #p1.clear()
                 p1.append(x)
-                p2.clear()
+                #p2.clear()
                 p2.append(y)
                 # grabs patch around mouse click and displays patch.
                 #im2 = patch(p1[0],p2[0],T,s)
                 #cv2.imshow('test',im2)
-                tmp = dtObj(x,y,tt,td,T,D,s)
+                # testing tmp = dtObj(x,y,tt,td,T,D,s)
                 #print(tmp) # check cv2 tresholds.
-                plot(tmp[0],tmp[1],img1)
+                # testing plot(tmp[0],tmp[1],img1)
                 return True
 
 # function that returns a patch around a single coordinate.
-
-'''
-def patch(y,x,img, size):
-        # gets the maximum possible xy coordinate.
-        maxY,maxX = img.shape[0], img.shape[1]
-
-        # if statements to handle coordinates that go out of bounds.
-        if x-(size/2) < 0:
-                newX = 0
-        elif x+(size/2) > maxX-1:
-                newX = maxX-(size+1)
-        else:
-                newX = x-(size/2)
-
-        if y-(size/2) < 0:
-                newY = 0
-        elif y+(size/2) > maxY-1:
-                newY = maxY-(size+1)
-        else:
-                newY = y+(size/2)
-        
-        # changes values from float to int
-        newX = int(newX)
-        newY = int(newY)
-
-        # grabing patch using numpy array
-        patch = img[newX:newX+size, newY-size:newY, :]
-        return patch
-'''
-
 def patch(y,x,img,size):
         temp = int(size/2)
         return img[x-temp:x+temp, y-temp:y+temp]
@@ -115,5 +85,9 @@ def comm(t,d):
 cv2.imshow('Texture',img1)
 #cv2.imshow('Depth',D)
 cv2.setMouseCallback('Texture', mouse)
+cv2.waitKey(0)
+for it in range(len(p1)):
+        tmp = dtObj(p1[it],p2[it],tt,td,T,D,s)
+        plot(tmp[0],tmp[1],img1)
 cv2.waitKey(0)
 cv2.destroyAllWindows
