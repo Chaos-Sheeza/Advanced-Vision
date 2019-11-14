@@ -7,8 +7,8 @@ from replication import *
 from variations import *
 
 # Importing images and obtaining region of interest
-img_t = cv2.imread("..\P1 Resources\c4t.bmp",1)
-img_d = cv2.imread("..\P1 Resources\c4d.bmp", 1)
+img_t = cv2.imread("../P1 Resources/c4t.bmp",1)
+img_d = cv2.imread("../P1 Resources/c4d.bmp", 1)
 #img_t = cv2.imread("../P1 Resources/balloons1f291t.bmp",1)
 #img_d = cv2.imread("../P1 Resources/balloons1f291d.bmp", 1)
 
