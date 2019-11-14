@@ -8,7 +8,6 @@ D = cv2.GaussianBlur(img2,(5,5),0)
 
 td = 3000
 tt = 3000
-p1,p2 = [],[]
 s = 6
 
 # Standard deviation function
@@ -19,11 +18,6 @@ def SSD(refPatch, iPatch):
 # on mouse function to pass as a cv2.setMouseCallback() parameter.
 def mouse(event,x,y,flags,param):
         if event == cv2.EVENT_LBUTTONDBLCLK:    # if left mouse button is double clicked
-                # clears previous coordinates and appends current mouse coordinate.
-                p1.clear()
-                p1.append(x)
-                p2.clear()
-                p2.append(y)
                 tmp = dtObj(x,y,tt,td,T,D,s)
                 plot(tmp[0],tmp[1],img1)
                 return True
